@@ -84,7 +84,7 @@ setup(
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='oda.omh@gmail.com',  # Optional
+    # author_email='',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -97,7 +97,7 @@ setup(
         'Development Status :: 3 - Alpha',
 
         # Pick your license as you wish
-        'License :: OSI Approved :: APACHE License 2.0:',
+        'License :: OSI Approved :: Apache Software License',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
@@ -186,11 +186,11 @@ setup(
     #
     # For example, the following would provide a command called `sample` which
     # executes the function `main` from this package when invoked:
-    entry_points={  # Optional
-        'console_scripts': [
-            'histoanalysis=histographer.analysis.main:entry',
-        ],
-    },
+    # entry_points={  # Optional
+    #     'console_scripts': [
+    #         'histoanalysis=histographer.analysis.main:entry',
+    #     ],
+    # },
 
     # List additional URLs that are relevant to your project as a dict.
     #
