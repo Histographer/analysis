@@ -2,7 +2,7 @@ from typing import List, Tuple
 import numpy as np
 
 
-def format_comparisons_as_matrix(comparisons: List[Tuple[int, int]], n_objects: int) -> np.ndarray:
+def relative_favorability_from_comparisons(comparisons: List[Tuple[int, int]], n_objects: int) -> np.ndarray:
     """
     Encodes the set of pairwise comparisons as a matrix
     :param comparisons: A list containing tuples representing comparisons of the form (winner, loser)
@@ -16,6 +16,7 @@ def format_comparisons_as_matrix(comparisons: List[Tuple[int, int]], n_objects: 
         total_comparisons[winner, loser] += 1
         total_comparisons[loser, winner] += 1
 
-    won_comparisons[won_comparisons.nonzero()] /= total_comparisons[total_comparisons.nonzero()]
+    relative_favorability = np.divide(won_comparisons, total_comparisons,
+                                      out=np.zeros_like(won_comparisons), where=total_comparisons != 0)
 
-    return won_comparisons
+    return relative_favorability
