@@ -1,5 +1,4 @@
 from src.histographer.analysis.ranking.algorithms import balanced_rank_estimation
-from src.histographer.analysis.ranking.mock import generate_mock_comparisons
 from src.histographer.analysis.ranking.error import e_vs_error_rate, e_vs_n_comparisons, e_vs_n_objects
 
 N_OBJECTS = 21
