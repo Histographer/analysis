@@ -39,6 +39,7 @@ def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticm
     for i in range(len(algorithms)):
         plt.plot(error_rates, errors[i])
 
+    plt.legend([alg.__name__ for alg in algorithms])
     plt.show()
 
 
@@ -67,6 +68,7 @@ def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[stati
     for i in range(len(algorithms)):
         plt.plot(n_comparisonss, errors[i])
 
+    plt.legend([alg.__name__ for alg in algorithms])
     plt.show()
 
 
@@ -75,7 +77,7 @@ def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[stati
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_comparisons: The number of pairwise comparisons performed
     :param error_rate: The ratio of pairwise comparisons which to not reflect the 'true' permutation
-    :param algorithm: A function object designating the algorithm which is to be tested
+    :param algorithms: A function object designating the algorithm which is to be tested
     :param repeats: The number of times a set of comparisons will be generated for a given number of objects,
     as well as the the number of different n_objects to be evaluated
     :param norm: The norm of the space used to calculate the error
@@ -95,4 +97,5 @@ def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[stati
     for i in range(len(algorithms)):
         plt.plot(n_objectss, errors[i])
 
+    plt.legend([alg.__name__ for alg in algorithms])
     plt.show()
