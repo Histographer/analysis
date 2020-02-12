@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def calculate_error_norm(ranking: np.ndarray, norm: int = 2):
+def calculate_error_norm(ranking: np.ndarray, norm: int = 2) -> float:
     """
     Calculates the error in the given ranking as a distance from the correct solution in the space given by 'norm'
     :param ranking: The ranking to be evaluated
@@ -14,7 +14,7 @@ def calculate_error_norm(ranking: np.ndarray, norm: int = 2):
     return np.linalg.norm(ranking - np.arange(ranking.shape[0]), norm)
 
 
-def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2):
+def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
     """
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_comparisons: The number of pairwise comparisons performed
@@ -26,7 +26,7 @@ def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticm
     :return: Returns nothing, displays a graph
     """
     errors = [[] for _ in range(len(algorithms))]
-    error_rates = np.linspace(0.01, 0.20, num=repeats)
+    error_rates = np.linspace(0.01, 0.50, num=repeats)
     for error_rate in error_rates:
         for i, algorithm in enumerate(algorithms):
             error = 0
@@ -40,10 +40,14 @@ def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticm
         plt.plot(error_rates, errors[i])
 
     plt.legend([alg.__name__ for alg in algorithms])
+    plt.xlabel("Error rate of comparisons")
+    plt.ylabel("Error")
+    plt.title("Error vs. Error rate of comparisons")
+    plt.ylim(bottom=0)
     plt.show()
 
 
-def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2):
+def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
     """
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_objects: The number of different objects the comparisons are sampled from
@@ -69,10 +73,13 @@ def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[stati
         plt.plot(n_comparisonss, errors[i])
 
     plt.legend([alg.__name__ for alg in algorithms])
+    plt.xlabel("Number of comparisons")
+    plt.ylabel("Error")
+    plt.title("Error vs. Number of comparisons")
     plt.show()
 
 
-def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2):
+def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
     """
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_comparisons: The number of pairwise comparisons performed
@@ -98,4 +105,7 @@ def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[stati
         plt.plot(n_objectss, errors[i])
 
     plt.legend([alg.__name__ for alg in algorithms])
+    plt.xlabel("Number of different objects")
+    plt.ylabel("Error")
+    plt.title("Error vs. Number of different objects")
     plt.show()
