@@ -1,7 +1,25 @@
+from typing import Tuple
+
 from skimage.color import rgb2hed
 import cv2
 import numpy as np
 
+default_parameters = {'cutoff_nucleus': 100, 'cutoff_tissue': 100}
+
+
+def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    hed = normalized_hed
+    if parameters is None:
+        parameters = default_parameters
+
+    # Find tissue
+    tissue: np.ndarray = hed[..., 1] > parameters['cutoff_tissue']
+    nucleus: np.ndarray = hed[..., 0] > parameters['cutoff_nucleus']
+    tissue[nucleus] = 0
+
+    no_class: np.ndarray = ~(tissue & nucleus)
+
+    return tissue, nucleus, no_class
 
 if __name__ == '__main__':
     def nothing(x):
@@ -16,7 +34,7 @@ if __name__ == '__main__':
     cv2.createTrackbar('Cutoff Nucleus', winname, 0, 255, nothing)
     cv2.createTrackbar('Cutoff Tissue', winname, 0, 255, nothing)
 
-    tissue = cv2.imread('../../../data/muscular_tissue.png')
+    tissue = cv2.imread('../../../../data/muscular_tissue.png')
     cv2.imshow('Tissue', tissue)
     hed = rgb2hed(cv2.cvtColor(tissue, cv2.COLOR_BGR2RGB))
 
