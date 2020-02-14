@@ -1,10 +1,11 @@
 from typing import Tuple
 
 from skimage.color import rgb2hed
+from histographer.analysis.image.color import normalize_channels
 import cv2
 import numpy as np
 
-default_parameters = {'cutoff_nucleus': 100 / 255, 'cutoff_tissue': 100 / 255}
+default_parameters = {'cutoff_nucleus': 160, 'cutoff_tissue': 140}
 
 
 def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -13,12 +14,15 @@ def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndar
         parameters = default_parameters
 
     # Find tissue
-    tissue: np.ndarray = hed[..., 1] > parameters['cutoff_tissue']
-    nucleus: np.ndarray = hed[..., 0] > parameters['cutoff_nucleus']
+    tissue: np.ndarray = hed[..., 1] < parameters['cutoff_tissue']
+    nucleus: np.ndarray = hed[..., 0] < parameters['cutoff_nucleus']
     tissue[nucleus] = 0
 
-    no_class: np.ndarray = ~(tissue & nucleus)
+    no_class: np.ndarray = ~(tissue | nucleus)
 
+    hedc = hed.copy()
+    hedc[tissue, ...] = [0, 255, 0]
+    hedc[nucleus, ...] = [0, 0, 255]
     return tissue, nucleus, no_class
 
 
@@ -41,9 +45,7 @@ if __name__ == '__main__':
     hed = rgb2hed(cv2.cvtColor(tissue, cv2.COLOR_BGR2RGB))
 
     # Normalize channels
-    hedn = np.zeros(hed.shape, np.uint8)
-    for i in range(hed.shape[2]):
-        hedn[..., i] = cv2.normalize(hed[..., i], None, 0, 255, cv2.NORM_MINMAX, 8).copy()
+    hedn = normalize_channels(hed)
 
     img = tissue.copy()
     while True:
@@ -55,6 +57,7 @@ if __name__ == '__main__':
         # get current positions of four trackbars
         cn = cv2.getTrackbarPos('Cutoff Nucleus', winname)
         ct = cv2.getTrackbarPos('Cutoff Tissue', winname)
+        print(cn, ct)
 
         img[:] = tissue.copy()
         img[hedn[..., 1] > ct, ...] = [0, 0, 255]

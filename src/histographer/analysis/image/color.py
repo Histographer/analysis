@@ -4,9 +4,10 @@ import cv2
 
 
 def normalize_channels(image: np.ndarray) -> np.ndarray:
+    normalized = np.zeros(image.shape, np.uint8)
     for i in range(image.shape[2]):
-        image[..., i] = cv2.normalize(image[..., i], None, 0, 255, cv2.NORM_MINMAX, 8)
-    return image
+        normalized[..., i] = cv2.normalize(image[..., i], None, 0, 255, cv2.NORM_MINMAX, 8)
+    return normalized
 
 
 def channel_metrics(masked_channel: np.ma.MaskedArray) -> dict:
