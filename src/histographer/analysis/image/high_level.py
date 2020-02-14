@@ -25,8 +25,7 @@ def coloring_stats(rgb_images: List[np.ndarray]):
 
         for name, seg in zip(('Nuclei H', 'Tissue E'), segments):
             metrics = channel_metrics(hed[seg])
-            for k, v in metrics.items():
-                image_results[f'{name} {k}'] = v
+            image_results[name] = metrics
 
         results.append(image_results)
 

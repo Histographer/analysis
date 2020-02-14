@@ -12,7 +12,7 @@ def normalize_channels(image: np.ndarray) -> np.ndarray:
 def channel_metrics(masked_channel: np.ma.MaskedArray) -> dict:
     return {
         'mean': masked_channel.mean(),
-        'stddev': masked_channel.std()
+        'std': masked_channel.std()
     }
 
 
