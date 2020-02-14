@@ -4,7 +4,7 @@ from skimage.color import rgb2hed
 import cv2
 import numpy as np
 
-default_parameters = {'cutoff_nucleus': 100, 'cutoff_tissue': 100}
+default_parameters = {'cutoff_nucleus': 100 / 255, 'cutoff_tissue': 100 / 255}
 
 
 def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -21,12 +21,14 @@ def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndar
 
     return tissue, nucleus, no_class
 
+
 if __name__ == '__main__':
     def nothing(x):
         pass
 
+
     winname = 'Bayesian Classifier'
-    
+
     # Create a black image, a window
     cv2.namedWindow(winname)
 
@@ -55,8 +57,7 @@ if __name__ == '__main__':
         ct = cv2.getTrackbarPos('Cutoff Tissue', winname)
 
         img[:] = tissue.copy()
-        img[hedn[..., 1] > ct, ...] = [0, 0,   255]
+        img[hedn[..., 1] > ct, ...] = [0, 0, 255]
         img[hedn[..., 0] > cn, ...] = [0, 255, 0]
-
 
     cv2.destroyAllWindows()
