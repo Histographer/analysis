@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def calculate_error_norm(ranking: np.ndarray, norm: int = 2) -> float:
+def calculate_error_norm(ranking: np.ndarray, norm: int = 1) -> float:
     """
     Calculates the error in the given ranking as a distance from the correct solution in the space given by 'norm'
     :param ranking: The ranking to be evaluated
