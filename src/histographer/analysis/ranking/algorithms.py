@@ -1,4 +1,5 @@
 from src.histographer.analysis.ranking.format import relative_favorability_from_comparisons, centrality_matrix_from_comparisons
+from src.histographer.analysis.ranking.mock import mock_compare, mock_compare_btl
 from typing import List, Tuple, Callable
 import numpy as np
 
@@ -47,3 +48,35 @@ def rank_centrality(comparisons: List[Tuple[int, int]], n_objects: int) -> np.nd
     scores = scores[:, 0]
     scores /= np.sum(scores)
     return np.argsort(scores)
+
+
+def iterate_active_elo(scores: np.ndarray):
+    """
+    Performs one iteration of the active ELO algorithm. Selects the two objects which have the closest
+    scores and compares them. Updates are made to the scores-array based on the results of this comparison
+    :param scores: A numpy array containing the current estimated elo-scores of all objects
+    :return: Nothing
+    """
+    differences = np.abs(np.subtract.outer(scores, scores))
+    np.fill_diagonal(differences, np.inf)
+    a, b = np.argwhere(differences == np.min(differences))[0, :]
+    winner, loser = mock_compare(a, b)
+
+    prob_result = 1 / (1 + 1.0 * np.power(10, (scores[winner] - scores[loser]) / 400))
+    scores[winner] += (1 - prob_result) * 800 / 500
+    scores[loser] -= prob_result * 800 / 500
+
+
+def active_elo(n_comparisons: int, n_objects: int):
+    """
+    Calls iterate_active_elo iteratively to generate a ranking.
+    :param n_comparisons: The number of times iterate_active_elo will be called
+    :param n_objects: The number of different objects the comparisons are sampled from
+    :return: A numpy array of integers between 0 and n_objects ranked by their favorability
+    """
+    scores = np.full(n_objects, 1000, dtype=float)
+    for _ in range(n_comparisons):
+        iterate_active_elo(scores)
+
+    return np.argsort(scores)
+
