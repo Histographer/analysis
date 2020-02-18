@@ -1,4 +1,4 @@
-from src.histographer.analysis.ranking.mock import generate_mock_comparisons
+from src.histographer.analysis.ranking.mock import generate_mock_comparisons, generate_mock_comparisons_btl
 from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
@@ -47,7 +47,7 @@ def e_vs_error_rate(n_comparisons: int, n_objects: int, algorithms: List[staticm
     plt.show()
 
 
-def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
+def e_vs_n_comparisons(n_objects: int, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
     """
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_objects: The number of different objects the comparisons are sampled from
@@ -64,7 +64,7 @@ def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[stati
         for i, algorithm in enumerate(algorithms):
             error = 0
             for _ in range(repeats):
-                comparisons = generate_mock_comparisons(n_comparisons, n_objects, error_rate)
+                comparisons = generate_mock_comparisons_btl(n_comparisons, n_objects)
                 ranking = algorithm(comparisons, n_objects)
                 error += calculate_error_norm(ranking, norm)
             errors[i].append(error / repeats)
@@ -79,7 +79,7 @@ def e_vs_n_comparisons(n_objects: int, error_rate: float, algorithms: List[stati
     plt.show()
 
 
-def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
+def e_vs_n_objects(n_comparisons: int, algorithms: List[staticmethod], repeats: int = 10, norm: int = 2) -> None:
     """
     Plots the error as calculated by 'calculate_error_norm' against a number of different error rates
     :param n_comparisons: The number of pairwise comparisons performed
@@ -96,7 +96,7 @@ def e_vs_n_objects(n_comparisons: int, error_rate: float, algorithms: List[stati
         for i, algorithm in enumerate(algorithms):
             error = 0
             for _ in range(repeats):
-                comparisons = generate_mock_comparisons(n_comparisons, n_objects, error_rate)
+                comparisons = generate_mock_comparisons_btl(n_comparisons, n_objects)
                 ranking = algorithm(comparisons, n_objects)
                 error += calculate_error_norm(ranking, norm)
             errors[i].append(error / repeats)
