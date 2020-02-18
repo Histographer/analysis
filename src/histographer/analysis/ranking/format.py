@@ -23,6 +23,12 @@ def relative_favorability_from_comparisons(comparisons: List[Tuple[int, int]], n
 
 
 def centrality_matrix_from_comparisons(comparisons: List[Tuple[int, int]], n_objects: int):
+    """
+    Generates the transformation matrix used by the rank_centrality ranking algorithm
+    :param comparisons: A list containing tuples representing comparisons of the form (winner, loser)
+    :param n_objects: The number of different objects the comparisons are sampled from
+    :return: The transformation matrix used by rank_centrality
+    """
     cm = np.zeros(shape=(n_objects, n_objects), dtype=float)
     for winner, loser in comparisons:
         cm[loser, winner] += 1
