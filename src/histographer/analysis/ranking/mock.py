@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from random import randrange, random
+from random import sample, random
 
 
 def generate_mock_comparisons(n_comparisons: int, n_objects: int, error_rate: float) -> List[Tuple[int, int]]:
@@ -11,14 +11,35 @@ def generate_mock_comparisons(n_comparisons: int, n_objects: int, error_rate: fl
     :return: A list of tuples of the form (a, b), which indicate that 'a' compared favorably to 'b'
     """
     comparisons = []
+    population = range(n_objects)
     for _ in range(n_comparisons):
-        a, b = randrange(n_objects), randrange(n_objects)
-        while a == b:
-            b = randrange(n_objects)
+        a, b = sample(population, 2)
 
         if random() < error_rate * abs(a - b) * 2 / n_objects:
             comparisons.append((min(a, b), max(a, b)))
         else:
             comparisons.append((max(a, b), min(a, b)))
+
+    return comparisons
+
+
+def generate_mock_comparisons_btl(n_comparisons: int, n_objects: int):
+    """
+    Generates n_comparisons number of pairwise comparisons based on the bradley Bradley-Terry-Luce model for
+    comparative judgement. Each object, i, has a weighting, w_i, associated with it. The probability that an object
+    i compares favorably with j is given by w_i / (w_i + w_j). In this test-function, these weightings are simply
+    the integers in range(n_objects). This function yields a correct result for approximately 95% of comparisons.
+    :param n_comparisons: The number of comparisons to be generated
+    :param n_objects: The number of objects the comparisons will be sampled from
+    :return: A list of tuples of the form (a, b), which indicate that 'a' compared favorably to 'b'
+    """
+    comparisons = []
+    population = range(n_objects)
+    for _ in range(n_comparisons):
+        a, b = sample(population, 2)
+        if a / (a + b) > random():
+            comparisons.append((a, b))
+        else:
+            comparisons.append((b, a))
 
     return comparisons
