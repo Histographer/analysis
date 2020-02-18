@@ -65,7 +65,7 @@ def e_vs_n_comparisons(n_objects: int, algorithms: List[staticmethod], repeats: 
             error = 0
             for _ in range(repeats):
                 comparisons = generate_mock_comparisons_btl(n_comparisons, n_objects)
-                ranking = algorithm(comparisons, n_objects)
+                ranking = algorithm(len(comparisons) if algorithm.__name__ == 'active_elo' else comparisons, n_objects)
                 error += calculate_error_norm(ranking, norm)
             errors[i].append(error / repeats)
 
@@ -97,7 +97,7 @@ def e_vs_n_objects(n_comparisons: int, algorithms: List[staticmethod], repeats: 
             error = 0
             for _ in range(repeats):
                 comparisons = generate_mock_comparisons_btl(n_comparisons, n_objects)
-                ranking = algorithm(comparisons, n_objects)
+                ranking = algorithm(len(comparisons) if algorithm.__name__ == 'active_elo' else comparisons, n_objects)
                 error += calculate_error_norm(ranking, norm)
             errors[i].append(error / repeats)
 
