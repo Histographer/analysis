@@ -23,7 +23,7 @@ def generate_mock_comparisons(n_comparisons: int, n_objects: int, error_rate: fl
     return comparisons
 
 
-def generate_mock_comparisons_btl(n_comparisons: int, n_objects: int):
+def generate_mock_comparisons_btl(n_comparisons: int, n_objects: int) -> List[Tuple[int, int]]:
     """
     Generates n_comparisons number of pairwise comparisons based on the bradley Bradley-Terry-Luce model for
     comparative judgement. Each object, i, has a weighting, w_i, associated with it. The probability that an object
@@ -43,3 +43,29 @@ def generate_mock_comparisons_btl(n_comparisons: int, n_objects: int):
             comparisons.append((b, a))
 
     return comparisons
+
+
+def mock_compare_btl(a: int, b: int) -> Tuple[int, int]:
+    """
+    Generates a single comparison of a and b based on BTL model.
+    :param a: Score of object being compared
+    :param b: Score of object being compared
+    :return: Tuple containing (winner, loser)
+    """
+    if a / (a + b) > random():
+        return a, b
+    else:
+        return b, a
+
+
+def mock_compare(a: int, b: int, error_rate: float = 0.05) -> Tuple[int, int]:
+    """
+    Generates a single comparison of a and b.
+    :param a: Score of object being compared
+    :param b: Score of object being compared
+    :return: Tuple containing (winner, loser)
+    """
+    if random() > error_rate:
+        return max(a, b), min(a, b)
+    else:
+        return min(a, b), max(a, b)
