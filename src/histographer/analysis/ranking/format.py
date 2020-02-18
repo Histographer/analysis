@@ -20,3 +20,16 @@ def relative_favorability_from_comparisons(comparisons: List[Tuple[int, int]], n
                                       out=np.zeros_like(won_comparisons), where=total_comparisons != 0)
 
     return relative_favorability
+
+
+def centrality_matrix_from_comparisons(comparisons: List[Tuple[int, int]], n_objects: int):
+    cm = np.zeros(shape=(n_objects, n_objects), dtype=float)
+    for winner, loser in comparisons:
+        cm[loser, winner] += 1
+
+    total_comparisons = cm + cm.T
+    cm = np.divide(cm, total_comparisons, out=np.zeros_like(cm), where=total_comparisons != 0) / (n_objects - 1)
+    diagonal = np.einsum('ii->i', cm, optimize='optimal')
+    diagonal[:] = 1 - np.sum(cm, axis=1)
+
+    return cm
