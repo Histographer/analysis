@@ -1,5 +1,5 @@
-from src.histographer.analysis.ranking.format import relative_favorability_from_comparisons
-from typing import List, Tuple
+from src.histographer.analysis.ranking.format import relative_favorability_from_comparisons, centrality_matrix_from_comparisons
+from typing import List, Tuple, Callable
 import numpy as np
 
 
@@ -33,15 +33,17 @@ def elo(comparisons: List[Tuple[int, int]], n_objects: int) -> np.ndarray:
 
 
 def rank_centrality(comparisons: List[Tuple[int, int]], n_objects: int) -> np.ndarray:
-    relative_favorability = relative_favorability_from_comparisons(comparisons, n_objects).T
-    relative_favorability /= (n_objects - 1)
-    diagonal = np.einsum('ii->i', relative_favorability, optimize='optimal')
-    diagonal[:] += 1 - np.sum(relative_favorability, axis=0)
+    """
+    Finds an ordering based on pairwise comparison using a random-walk interpretation over
+    a rank centrality graph.
+    :param comparisons: A list containing tuples representing comparisons of the form (winner, loser)
+    :param n_objects: The number of different objects the comparisons are sampled from
+    :return: A numpy array of integers between 0 and n_objects ranked by their favorability
+    """
+    cm = centrality_matrix_from_comparisons(comparisons, n_objects)
 
-    eigenvalues, eigenvectors = np.linalg.eig(relative_favorability)
+    eigenvalues, eigenvectors = np.linalg.eig(cm.T)
     scores = eigenvectors[:, np.isclose(eigenvalues, 1)]
     scores = scores[:, 0]
-    print(scores)
+    scores /= np.sum(scores)
     return np.argsort(scores)
-
-
