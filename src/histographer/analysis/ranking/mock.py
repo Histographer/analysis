@@ -16,7 +16,7 @@ def generate_mock_comparisons(n_comparisons: int, n_objects: int, error_rate: fl
         while a == b:
             b = randrange(n_objects)
 
-        if random() < error_rate:
+        if random() < error_rate * abs(a - b) * 2 / n_objects:
             comparisons.append((min(a, b), max(a, b)))
         else:
             comparisons.append((max(a, b), min(a, b)))
