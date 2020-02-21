@@ -8,13 +8,21 @@ import numpy as np
 default_parameters = {'cutoff_nucleus': 160, 'cutoff_tissue': 140}
 
 
-def segment_rgb(rgb: np.ndarray, parameters=None):
-    """Returns (tissue, nucleus, no_class)"""
+def segment_rgb(rgb: np.ndarray, parameters=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Returns (tissue, nucleus, no_class)
+    :param rgb: RGB NumPy array
+    :param parameters:
+    :return: A tuple of NumPy arrays (Tissue, Nucleus, N_class)
+    """
     return segment_sample(normalize_channels(rgb2hed(rgb)), parameters=parameters)
 
 
 def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Returns (tissue, nucleus, no_class)"""
+    """Returns (tissue, nucleus, no_class)
+    :param normalized_hed: NumPy array with normalized HED channels
+    :param parameters: Dictionary of parameters used in to segment images.
+    :return: A tuple of NumPy arrays (Tissue, Nucleus, N_class)
+    """
     hed = normalized_hed
     if parameters is None:
         parameters = default_parameters

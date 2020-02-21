@@ -3,14 +3,16 @@
 import numpy as np
 import cv2
 
-from typing import List
+from typing import List, Dict
 
 from histographer.analysis.image.color import rgb2hed, normalize_channels, channel_metrics
 from histographer.analysis.image.segment import segment_sample
 
 
-def coloring_stats(rgb_images: List[np.ndarray]):
+def coloring_stats(rgb_images: List[np.ndarray]) -> List[Dict]:
     """Perform image segmentation and get coloring information for segmented areas.
+    :param rgb_images: List of numpy arrays containing RGB images
+    :return: List of dictionaries with results
     """
     results = []
     for image in rgb_images:
