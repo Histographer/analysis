@@ -80,3 +80,20 @@ def active_elo(n_comparisons: int, n_objects: int):
 
     return np.argsort(scores)
 
+
+def compute_elo_scores(image_ids: List[int], comparisons: List[Tuple[int, int]]) -> np.ndarray:
+    """
+    Implements the ELO-algorithm to return ELO-scores for each item based on the pairwise comparisons
+    :param image_ids: A list containing the id of every item in the population the comparisons are drawn from
+    :param comparisons: A list containing tuples representing comparisons of the form (winner, loser)
+    :return: A numpy array of the scores of each of the items
+    """
+    id_to_index = {im_id: i for i, im_id in enumerate(image_ids)}
+    scores = np.full(len(image_ids), 1000, dtype=float)
+    for winner, loser in comparisons:
+        winner, loser = id_to_index[winner], id_to_index[loser]
+        prob_result = 1 / (1 + 1.0 * np.power(10, (scores[winner] - scores[loser]) / 400))
+        scores[winner] += (1 - prob_result) * 800 / len(comparisons)
+        scores[loser] -= prob_result * 800 / len(comparisons)
+
+    return scores
