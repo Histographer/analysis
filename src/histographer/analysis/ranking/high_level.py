@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from src.histographer.analysis.ranking.algorithms import compute_elo_scores
+from histographer.analysis.ranking.algorithms import compute_elo_scores
 
 import numpy as np
 

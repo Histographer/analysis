@@ -1,4 +1,4 @@
-from src.histographer.analysis.ranking.mock import generate_mock_comparisons, generate_mock_comparisons_btl
+from histographer.analysis.ranking.mock import generate_mock_comparisons, generate_mock_comparisons_btl
 from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
