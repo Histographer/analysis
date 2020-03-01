@@ -1,9 +1,12 @@
 from __future__ import print_function
 import cv2
 import numpy as np
+from pathlib import Path
 
 MAX_FEATURES = 500
 GOOD_MATCH_PERCENT = 0.15
+
+data_dir = Path(__file__).parents[4] / 'data' / 'alignment'
 
 
 def align_images(im1, im2):
@@ -29,7 +32,7 @@ def align_images(im1, im2):
 
     # Draw top matches
     imMatches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
-    cv2.imwrite("matches.jpg", imMatches)
+    cv2.imwrite(str(data_dir / "matches.png"), imMatches)
 
     # Extract location of good matches
     points1 = np.zeros((len(matches), 2), dtype=np.float32)
@@ -51,12 +54,12 @@ def align_images(im1, im2):
 
 if __name__ == '__main__':
     # Read reference image
-    refFilename = "form.jpg"
+    refFilename = str(data_dir / "1.png")
     print("Reading reference image : ", refFilename)
     imReference = cv2.imread(refFilename, cv2.IMREAD_COLOR)
 
     # Read image to be aligned
-    imFilename = "scanned-form.jpg"
+    imFilename = str(data_dir / "2.png")
     print("Reading image to align : ", imFilename)
     im = cv2.imread(imFilename, cv2.IMREAD_COLOR)
 
@@ -66,7 +69,7 @@ if __name__ == '__main__':
     imReg, h = align_images(im, imReference)
 
     # Write aligned image to disk.
-    outFilename = "aligned.jpg"
+    outFilename = str(data_dir / "aligned.png")
     print("Saving aligned image : ", outFilename)
     cv2.imwrite(outFilename, imReg)
 
