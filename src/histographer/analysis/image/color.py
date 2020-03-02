@@ -14,6 +14,10 @@ def normalize_channels(image: np.ndarray) -> np.ndarray:
     return normalized
 
 
+def rgb_to_normalized_hed(image: np.ndarray):
+    return normalize_channels(rgb2hed(image))
+
+
 def channel_metrics(masked_channel: np.ma.MaskedArray) -> dict:
     """Gets metrics for a masked image for a single channel
     :param masked_channel: Numpy masked array
