@@ -149,7 +149,8 @@ setup(
         'numpy',
         'scipy',
         'scikit-image',
-        'opencv-python'
+        'opencv-python',
+        'cytomine-python-client'
     ],  # Optional
 
     # List additional groups of dependencies here (e.g. development
