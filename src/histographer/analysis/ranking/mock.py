@@ -1,5 +1,8 @@
 from typing import List, Tuple
 from random import sample, random
+import os
+from PIL import Image
+import numpy as np
 
 
 def generate_mock_comparisons(n_comparisons: int, n_objects: int, error_rate: float) -> List[Tuple[int, int]]:
@@ -69,3 +72,25 @@ def mock_compare(a: int, b: int, error_rate: float = 0.05) -> Tuple[int, int]:
         return max(a, b), min(a, b)
     else:
         return min(a, b), max(a, b)
+
+
+def save_dummy_gradient(start: Tuple[int, int, int], end: Tuple[int, int, int],
+                        resolution: Tuple[int, int], no_images: int) -> None:
+    """
+    Generates and saves a gradient of dummy images for testing of the ranking algorithm.
+    :param start: The (R, G, B), tuple of integers, value of the first color of the gradient
+    :param end: The (R, G, B), tuple of integers, value of the last color of the gradient
+    :param resolution: The resolution of the images (width, height)
+    :param no_images: The number of images to be generated
+    :return: Nothing, but saves images to the 'dummy_images' folder
+    """
+    rs, gs, bs = ([int(x) for x in np.linspace(i, f, no_images)] for i, f in zip(start, end))
+
+    try:
+        os.mkdir('dummy_images')
+    except FileExistsError:
+        pass
+
+    for i in range(no_images):
+        img = Image.new('RGB', resolution, (rs[i], gs[i], bs[i]))
+        img.save(f'dummy_images/gradient{i}.png', 'png')
