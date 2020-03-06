@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from random import sample, random
 import os
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 
@@ -75,22 +75,25 @@ def mock_compare(a: int, b: int, error_rate: float = 0.05) -> Tuple[int, int]:
 
 
 def save_dummy_gradient(start: Tuple[int, int, int], end: Tuple[int, int, int],
-                        resolution: Tuple[int, int], no_images: int) -> None:
+                        resolution: Tuple[int, int], no_images: int, fontsize: int = 128) -> None:
     """
     Generates and saves a gradient of dummy images for testing of the ranking algorithm.
     :param start: The (R, G, B), tuple of integers, value of the first color of the gradient
     :param end: The (R, G, B), tuple of integers, value of the last color of the gradient
     :param resolution: The resolution of the images (width, height)
     :param no_images: The number of images to be generated
+    :param fontsize: The size of the text on the image
     :return: Nothing, but saves images to the 'dummy_images' folder
     """
     rs, gs, bs = ([int(x) for x in np.linspace(i, f, no_images)] for i, f in zip(start, end))
-
     try:
         os.mkdir('dummy_images')
     except FileExistsError:
         pass
 
+    font = ImageFont.truetype('Comfortaa-Regular.ttf', fontsize)
     for i in range(no_images):
         img = Image.new('RGB', resolution, (rs[i], gs[i], bs[i]))
-        img.save(f'dummy_images/gradient{i}.png', 'png')
+        w, h = font.getsize(str(i + 1))
+        ImageDraw.Draw(img).text(((resolution[0] - w) // 2, (resolution[1] - h) // 2), str(i + 1), (0, 0, 0), font=font)
+        img.save(f'dummy_images/gradient{i + 1}.png', 'png')
