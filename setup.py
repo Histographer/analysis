@@ -150,7 +150,8 @@ setup(
         'scipy',
         'scikit-image',
         'opencv-python',
-        'cytomine-python-client'
+        'cytomine-python-client',
+        'scikit-image'
     ],  # Optional
 
     # List additional groups of dependencies here (e.g. development

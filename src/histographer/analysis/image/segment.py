@@ -2,6 +2,7 @@ from typing import Tuple
 
 from skimage.color import rgb2hed
 from histographer.analysis.image.color import normalize_channels
+import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 
@@ -35,6 +36,19 @@ def segment_sample(normalized_hed: np.ndarray, parameters=None) -> Tuple[np.ndar
     no_class: np.ndarray = ~(tissue | nucleus)
 
     return tissue, nucleus, no_class
+
+
+def segment_plot_rgb(rgb: np.ndarray):
+    plt.imshow(rgb)
+    plt.show()
+    rgb = rgb.copy()
+    tissue, nuclei, no_class = segment_rgb(rgb)
+    rgb[tissue, ...] = [255, 0, 0]
+    rgb[nuclei, ...] = [0, 255, 0]
+    rgb[no_class, ...] = [0, 0, 255]
+    plt.imshow(rgb)
+    plt.show()
+    return tissue, nuclei, no_class
 
 
 if __name__ == '__main__':
