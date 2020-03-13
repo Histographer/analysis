@@ -6,7 +6,7 @@ from collections import defaultdict as dd
 from pathlib import Path
 
 
-def get_images_with_annotations(host, public_key, private_key, project_id, download=True):
+def get_images_with_annotations(host, public_key, private_key, project_id, download=True, annotation_ids=None):
     """
     :param project_id:
     :return: List of dictionaries with 'image' and 'annotations'
@@ -15,18 +15,22 @@ def get_images_with_annotations(host, public_key, private_key, project_id, downl
     with Cytomine(host=host, public_key=public_key, private_key=private_key, verbose=True) as cytomine:
         annotations = AnnotationCollection()
         annotations.project = project_id
+
         annotations.fetch()
 
         image_regions = dd(list)
 
         for annotation in annotations:
+            if annotation_ids is not None and annotation.id not in annotation_ids:
+                continue
             annotation: Annotation
             path = Path('/tmp') / 'cytomine' / 'p{project}' / 'i{image}' / 'masked{id}'
-            if download:
+            formatted = str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.png'
+            if download and not Path(formatted).is_file():
                 annotation.dump(str(path), override=True, mask=True, alpha=True)
                 print(f'Dumped to {path}')
             image_regions[annotation.image]\
-                .append(str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.png')
+                .append(formatted)
 
         print(image_regions)
         """
@@ -48,15 +52,20 @@ if __name__ == '__main__':
     import numpy as np
 
     host = safe_load(open(Path(__file__).parents[4] / 'secrets.yml', 'r'))['host']
-    image_regions = get_images_with_annotations(**host, download=False)
+    image_regions = get_images_with_annotations(**host, download=True)
+    print(len(image_regions))
     rgbas = [imread(im_url) for im_url in image_regions[next(iter(image_regions.keys()))]]
+    print(rgbas)
 
-    i = 3
+    i = 0
     im = rgbas[i]
     mask = im[..., 3]
 
-    im[mask, :] = [0, 0, 0, 0]
+    print('before mask')
+    im[mask, :] = 0
+    print('before segment')
     tissue, nuclei, no_class = segment_plot_rgb(im[..., :3])
+    print('after segment')
 
     hed = rgb2hed(im[..., :3])
 
