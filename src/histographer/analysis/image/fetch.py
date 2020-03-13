@@ -6,7 +6,7 @@ from collections import defaultdict as dd
 from pathlib import Path
 
 
-def get_images_with_annotations(host, public_key, private_key, project_id):
+def get_images_with_annotations(host, public_key, private_key, project_id, download=True):
     """
     :param project_id:
     :return: List of dictionaries with 'image' and 'annotations'
@@ -21,11 +21,12 @@ def get_images_with_annotations(host, public_key, private_key, project_id):
 
         for annotation in annotations:
             annotation: Annotation
-            path = Path('/tmp/cytomine') / 'p{project}' / 'i{image}' / 'masked{id}'
-            # annotation.dump(str(path), override=True, mask=True, alpha=True)
+            path = Path('/tmp') / 'cytomine' / 'p{project}' / 'i{image}' / 'masked{id}'
+            if download:
+                annotation.dump(str(path), override=True, mask=True, alpha=True)
+                print(f'Dumped to {path}')
             image_regions[annotation.image]\
                 .append(str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.png')
-            print(f'Dumped to {path}')
 
         print(image_regions)
         """
@@ -47,10 +48,10 @@ if __name__ == '__main__':
     import numpy as np
 
     host = safe_load(open(Path(__file__).parents[4] / 'secrets.yml', 'r'))['host']
-    image_regions = get_images_with_annotations(**host)
+    image_regions = get_images_with_annotations(**host, download=False)
     rgbas = [imread(im_url) for im_url in image_regions[next(iter(image_regions.keys()))]]
 
-    i = 4
+    i = 3
     im = rgbas[i]
     mask = im[..., 3]
 
