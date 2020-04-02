@@ -43,12 +43,11 @@ def get_images_with_annotations(host, public_key, private_key, project_id, downl
             print(f'Found annotation {annotation.id}')
             annotation: Annotation
             path = Path('/tmp') / 'cytomine' / 'p{project}' / 'i{image}' / 'masked{id}'
-            formatted = str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.png'
+            formatted = str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.jpg'
             print(f'Checking whether or not to download to {formatted}')
             if download and not Path(formatted).is_file():
                 print(f'Dumping annotation to {formatted}')
                 annotation.dump(str(path), override=True, mask=True, alpha=True)
-                print(f'Dumped to {path}')
                 assert Path(formatted).is_file(), "Annotation image not found after download!"
             image_regions[annotation.image]\
                 .append(formatted)
