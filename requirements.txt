@@ -2,5 +2,5 @@ numpy==1.18.2
 scipy==1.4.1
 scikit-image==0.16.2
 opencv-python==*
-git+git://github.com/cytomine/Cytomine-python-client@4a2e0bc8424cdbe4b4ee0b5454c0c00eae74c9cf#egg=cytomine-python-client
+cytomine-python-client==2.2.0
 PyYAML==*
