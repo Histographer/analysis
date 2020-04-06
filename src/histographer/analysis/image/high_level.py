@@ -76,7 +76,7 @@ if __name__ == '__main__':
     from yaml import safe_load
     from pathlib import Path
     with open(Path(__file__).parents[4] / 'secrets.yml', 'r') as f:
-        host_info = safe_load(f)['host']
+        host_info: dict = safe_load(f)['host']
 
     annotation_id = 1032341
     print(image_analysis(host_info, [annotation_id], ['he', 'hsv']))

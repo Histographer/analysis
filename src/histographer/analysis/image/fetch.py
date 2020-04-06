@@ -71,6 +71,7 @@ class ImageData:
     def rgba(self):
         if self._rgba is None:
             self._rgba = imread(self.local_path)
+            assert self._rgba.shape[-1] == 4, f'Transparency channel not read from {self.local_path}'
 
         return self._rgba
 
@@ -123,8 +124,13 @@ if __name__ == '__main__':
     host = safe_load(open(Path(__file__).parents[4] / 'secrets.yml', 'r'))['host']
     image_regions = get_images_with_annotations(**host, download=True, annotation_ids=[1064743, 1064530])
     print(len(image_regions))
+    print(image_regions)
     rgbas = [imread(im_url) for im_url in image_regions[next(iter(image_regions.keys()))]]
-    print(rgbas)
+    #print(rgbas)
+    imdat = ImageData(image_regions[385963][0])
+    print(imdat.rgb)
+    print(imdat.mask, imdat.hed)
+    exit()
 
     i = 0
     im = rgbas[i]
