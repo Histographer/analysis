@@ -14,7 +14,7 @@ from histographer.analysis.image.color import normalize_channels
 from histographer.analysis.image.segment import segment_sample
 
 
-def get_images_with_annotations(host, public_key, private_key, project_id, download=True, annotation_ids=None):
+def get_images_with_annotations(host, public_key, private_key, project_id=None, download=True, annotation_ids=None):
     """
     Find and download (if not present) annotation information and images
     :param annotation_ids: List of annotations to fetch
@@ -42,8 +42,8 @@ def get_images_with_annotations(host, public_key, private_key, project_id, downl
                 continue
             print(f'Found annotation {annotation.id}')
             annotation: Annotation
-            path = Path('/tmp') / 'cytomine' / 'p{project}' / 'i{image}' / 'masked{id}'
-            formatted = str(path).format(id=annotation.id, image=annotation.image, project=annotation.project) + '.jpg'
+            path = Path('/tmp') / 'cytomine' / 'p{project}' / 'i{image}' / 'masked{id}.png'
+            formatted = str(path).format(id=annotation.id, image=annotation.image, project=annotation.project)
             print(f'Checking whether or not to download to {formatted}')
             if download and not Path(formatted).is_file():
                 print(f'Dumping annotation to {formatted}')
@@ -105,7 +105,7 @@ class ImageData:
     @property
     def mask(self) -> np.ndarray:
         if self._mask is None:
-            self._mask = self.rgba[..., 3]
+            self._mask = self.rgba[..., 3].astype(bool)
 
         return self._mask
 
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     import numpy as np
 
     host = safe_load(open(Path(__file__).parents[4] / 'secrets.yml', 'r'))['host']
-    image_regions = get_images_with_annotations(**host, download=True, annotation_ids=[835765])
+    image_regions = get_images_with_annotations(**host, download=True, annotation_ids=[1064743, 1064530])
     print(len(image_regions))
     rgbas = [imread(im_url) for im_url in image_regions[next(iter(image_regions.keys()))]]
     print(rgbas)
