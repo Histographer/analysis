@@ -58,10 +58,10 @@ def image_analysis(host_info: dict, annotation_ids: List[int], analyses: List[st
                                                           download=True,
                                                           annotation_ids=[annotation_id]).values())[0][0]
         image_data = ImageData(cytomine_image)
-        d = {'annotationId': annotation_id, 'results': {
-            an: getattr(analysis_module, an)(image_data)
+        d = {'annotationId': annotation_id, 'results': [
+            getattr(analysis_module, an)(image_data)
             for an in analyses
-        }}
+        ]}
 
         annotation_analyses.append(d)
 
