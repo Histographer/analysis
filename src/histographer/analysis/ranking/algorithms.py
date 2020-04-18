@@ -1,5 +1,6 @@
-from src.histographer.analysis.ranking.format import relative_favorability_from_comparisons, centrality_matrix_from_comparisons
-from src.histographer.analysis.ranking.mock import mock_compare, mock_compare_btl
+from histographer.analysis.ranking.format import relative_favorability_from_comparisons, centrality_matrix_from_comparisons
+from histographer.analysis.ranking.mock import mock_compare, mock_compare_btl
+
 from typing import List, Tuple, Callable
 import numpy as np
 
