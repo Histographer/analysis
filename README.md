@@ -22,16 +22,14 @@ The package can be installed using `pip`.
 python -m pip install histographer-analysis
 ```
 ​
-## Running the tests
-​
-TODO
-How to run the automated tests, if there are any
-​
 ## Deployment
 ​
+This package is used in a wrapper package, analysis-rest-api. Instructions for how to deploy it can be found 
+[here](https://github.com/histographer/analysis-rest-api).
 TODO
 How to deploy to a production system (perhaps a link to the infrastructure repo?)
 ​
-## Endpoints (or "API", or something like that) (if applicable)
+## Endpoints
 ​
-A full overview of endpoints and their usage can be found [here](https://github.com/histographer/analysis-rest-api/blob/master/README.md)
+A full overview of endpoints and their usage can be found
+[here](https://github.com/histographer/analysis-rest-api/blob/master/README.md)
