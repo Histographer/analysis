@@ -50,7 +50,8 @@ def image_analysis(host_info: dict, annotation_ids: List[int], analyses: List[st
     :raises RuntimeError: When images fail analysis
     """
 
-    assert all(hasattr(analysis_module, an) for an in analyses)
+    assert all(hasattr(analysis_module, an) for an in analyses),\
+        f'{", ".join([an for an in analyses if not hasattr(analysis_module, an)])} is/are not implemented.'
 
     annotation_analyses = []
     for annotation_id in annotation_ids:
