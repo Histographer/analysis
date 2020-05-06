@@ -1,6 +1,6 @@
 # Histographer Analysis
 ​
-Package for image analysis as used in [Histographer's](https://github.com/histographer) packages.
+Package for image analysis and ranking as used in [Histographer's](https://github.com/histographer) packages.
 ​
 ## Getting started
 ​
