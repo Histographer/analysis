@@ -71,7 +71,8 @@ class ImageData:
     def rgba(self):
         if self._rgba is None:
             self._rgba = imread(self.local_path)
-            assert self._rgba.shape[-1] == 4, f'Transparency channel not read from {self.local_path}'
+            assert self._rgba.shape[-1] == 4, f'Transparency channel not read from {self.local_path}' \
+                                              f'. Is the image RGBA?'
 
         return self._rgba
 

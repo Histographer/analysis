@@ -29,12 +29,11 @@ def channel_metrics(masked_channel: np.ma.MaskedArray) -> dict:
     }
 
 
-
 if __name__ == '__main__':
-    #                           R       G      B
-    deconv_matrix = np.array([[1.88,  -0.07, -0.60],     # Hematoxylin
-                              [-1.02,  1.13, -0.48],     # Eosin
-                              [-0.55, -0.13, 1.57]])     # DAB
+    #                          R       G      B
+    paper_matrix = np.array([[1.88,  -0.07, -0.60],     # Hematoxylin
+                             [-1.02,  1.13, -0.48],     # Eosin
+                             [-0.55, -0.13, 1.57]])     # DAB
     deconv_matrix = rgb2hed
     tissue = cv2.imread('../../../../data/muscular_tissue.png')
     cv2.imshow('Tissue', tissue)
