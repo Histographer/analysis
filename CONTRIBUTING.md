@@ -22,7 +22,9 @@ object allows alternative representations to be generated only when needed, and 
 up a lot of memory, `ImageData` objects should be deleted after use, only keeping one in memory at a time.
 
 ### Ranking
-TODO
+`ranking` contains functions for computing a ranking over objects based on pairwise comparisons. It also contains methods for generating test data when real data cannot be collected, and methods for evaluating the quality of different algorithms.
+
+The function `suggest_pair` in `high_level` is the only function to communicate with the rest of the histographer system, and can be edited to allow for modifications to the ranking algorithm used in the Compare service.
 
 ## Testing
 ​
