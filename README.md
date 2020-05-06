@@ -1,4 +1,4 @@
-# Title of the component (e.g. "Compare Backend")
+# Histographer Analysis
 ​
 Package for image analysis as used in [Histographer's](https://github.com/histographer) packages.
 ​
